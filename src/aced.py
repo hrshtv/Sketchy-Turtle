@@ -15,7 +15,7 @@ def dispim(img, cmap='gray'):
     plt.tight_layout()
     plt.show()
 
-"""Function mapping image size to kernel size, mapping found emperically."""
+"""Function mapping image size to kernel size, mapping found emperically/heuristic."""
 def get_ksize(size):
     if size < 540:
         ksize = 5
@@ -34,47 +34,24 @@ def detect(src, sigma=0.33):
     m = np.median(src)
     
     # Getting the integer bounds automatically for double thresholding
-    l = int(max(0  , (1.0-sigma)*m))
+    # This is based on a heuristic/Rule-of-thumb given in the link:
+    # http://www.kerrywong.com/2009/05/07/canny-edge-detection-auto-thresholding/
+    l = int(max(0, (1.0-sigma)*m))
     u = int(min(255, (1.0+sigma)*m))
     
     noisy_dst = cv2.Canny(src, l, u)
     
-    # 'Smoothening' the noisy image with gaussian blurring
+    # 'Smoothening' the noisy edges in the image with gaussian blurring
     size = min(src.shape)
     k = get_ksize(size)
     dst = cv2.GaussianBlur(noisy_dst, (k, k), 0)
     return dst
 
 def thresh(img, t=0.5, method='bin'):
-    # Binary Thresholding:
-    # c = (img > t).astype(int)
-    # return c
+    # Thresholding:
     if method == 'agt':
         c = cv2.adaptiveThreshold(img, 1, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
         return c
     elif method == 'bin':
         c = (img > t).astype(int)
         return c
-    
-
-# src = cv2.imread('square.png', 0)
-# src = cv2.GaussianBlur(src, (5, 5), 0)
-
-# dst = detect(src)
-# dispim(src)
-# dispim(dst)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
