@@ -39,6 +39,7 @@ A turtle that (almost) sketches any image given to it.
 - Increase the efficiency of the sketching program
     - Currently some edges detected are very thick, which increases time taken unneccesarily, try edge thinning algorithms
     - While finding closest neighbours, omit the points that are too close to one another, to decrease the input size
+    - [Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm)
 
 ---
 
